@@ -1,8 +1,13 @@
 # xinput
 
-go bindings for xinput dll
+Go bindings for XInput library
 
-todo:
-support other versions
-testing
-everything
+TODO:
+- version compatibility (in progress)
+- undocumented procedures
+- deadzones
+- button maps
+- per-device settings
+- system hooks
+- testing
+- everything
