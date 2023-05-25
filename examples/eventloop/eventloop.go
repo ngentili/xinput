@@ -1,20 +1,21 @@
 package main
 
 import (
-	"math"
 	"time"
 
 	"github.com/ngentili/xinput"
 )
 
 func main() {
-	PLAYER_1 := 0
+	// tickrate
+	tickHz := 60.0
+	tick := time.Duration((1.0 / tickHz) * float64(time.Second))
 
-	xinput.SetThumbstickDeadzones(7000, math.MaxInt16, 7000, math.MaxInt16)
+	// initialize controller
+	xbc := xinput.NewXboxController(0)
+	xbc.SetThumbstickDeadzones(5000, 5000)
 
-	interval := time.Duration(math.Floor((1.0 / 60.0) * float64(time.Second)))
-
-	events := xinput.GetEventLoop(PLAYER_1, xinput.EVENT_TYPE_BUTTON_PRESS, interval)
+	events := GetEventLoop(0, EVENT_TYPE_BUTTON_PRESS, tick)
 
 	// block until a new event is received
 	for event := range events {
