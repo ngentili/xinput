@@ -180,6 +180,26 @@ func GetState(userIndex int) (bool, *XINPUT_STATE) {
 	}
 }
 
+func GetStateEx(userIndex int) (bool, *XINPUT_STATE) {
+	if api.XInputOrdinal100 == nil {
+		panic("Procedure not suppported in current XInput version")
+	}
+
+	state := XINPUT_STATE{}
+
+	result, _, _ := api.XInputOrdinal100.Call(uintptr(userIndex), uintptr(unsafe.Pointer(&state)))
+
+	if result == uintptr(windows.ERROR_SUCCESS) {
+		return true, &state
+
+	} else if result != uintptr(windows.ERROR_DEVICE_NOT_CONNECTED) {
+		return false, &state
+
+	} else {
+		panic(syscall.Errno(result))
+	}
+}
+
 func adjustForDeadzone(x, y, dz float64) (float64, float64) {
 	// https://learn.microsoft.com/en-us/windows/win32/xinput/getting-started-with-xinput#dead-zone
 

@@ -65,3 +65,7 @@ func (c *XboxController) GetHeadsetBatteryInformation() (*XINPUT_BATTERY_INFORMA
 func (c *XboxController) GetState() (bool, *XINPUT_STATE) {
 	return GetState(c.UserIndex)
 }
+
+func (c *XboxController) GetStateEx() (bool, *XINPUT_STATE) {
+	return GetStateEx(c.UserIndex)
+}
