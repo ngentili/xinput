@@ -22,7 +22,7 @@ var (
 
 	dll *windows.DLL
 
-	api *XInputApi
+	api = &XInputApi{}
 )
 
 func init() {
@@ -46,43 +46,43 @@ func init() {
 		api.XInputEnable = proc
 	}
 	if proc, err := dll.FindProc("XInputGetAudioDeviceIds"); err == nil {
-		api.XInputEnable = proc
+		api.XInputGetAudioDeviceIds = proc
 	}
 	if proc, err := dll.FindProc("XInputGetDSoundAudioDeviceGuids"); err == nil {
-		api.XInputEnable = proc
+		api.XInputGetDSoundAudioDeviceGuids = proc
 	}
 	if proc, err := dll.FindProc("XInputGetBatteryInformation"); err == nil {
-		api.XInputEnable = proc
+		api.XInputGetBatteryInformation = proc
 	}
 	if proc, err := dll.FindProc("XInputGetCapabilities"); err == nil {
-		api.XInputEnable = proc
+		api.XInputGetCapabilities = proc
 	}
 	if proc, err := dll.FindProc("XInputGetKeystroke"); err == nil {
-		api.XInputEnable = proc
+		api.XInputGetKeystroke = proc
 	}
 	if proc, err := dll.FindProc("XInputGetState"); err == nil {
-		api.XInputEnable = proc
+		api.XInputGetState = proc
 	}
 	if proc, err := dll.FindProc("XInputSetState"); err == nil {
-		api.XInputEnable = proc
+		api.XInputSetState = proc
 	}
 	if proc, err := dll.FindProcByOrdinal(100); err == nil {
-		api.XInputEnable = proc
+		api.XInputOrdinal100 = proc
 	}
 	if proc, err := dll.FindProcByOrdinal(101); err == nil {
-		api.XInputEnable = proc
+		api.XInputOrdinal101 = proc
 	}
 	if proc, err := dll.FindProcByOrdinal(102); err == nil {
-		api.XInputEnable = proc
+		api.XInputOrdinal102 = proc
 	}
 	if proc, err := dll.FindProcByOrdinal(103); err == nil {
-		api.XInputEnable = proc
+		api.XInputOrdinal103 = proc
 	}
 	if proc, err := dll.FindProcByOrdinal(104); err == nil {
-		api.XInputEnable = proc
+		api.XInputOrdinal104 = proc
 	}
 	if proc, err := dll.FindProcByOrdinal(108); err == nil {
-		api.XInputEnable = proc
+		api.XInputOrdinal108 = proc
 	}
 
 	fmt.Println("Available procedures:")
@@ -111,8 +111,10 @@ func init() {
 	fmt.Println("Devices connected: ", connected)
 }
 
+// xinput procedure wrappers
+
 func GetCapabilities(userIndex int) (*XINPUT_CAPABILITIES, error) {
-	if api.XInputGetCapabilities != nil {
+	if api.XInputGetCapabilities == nil {
 		panic("Procedure not suppported in current XInput version")
 	}
 
@@ -134,7 +136,7 @@ func GetCapabilities(userIndex int) (*XINPUT_CAPABILITIES, error) {
 }
 
 func GetBatteryInformation(userIndex int, deviceSubtype int) (*XINPUT_BATTERY_INFORMATION, error) {
-	if api.XInputGetBatteryInformation != nil {
+	if api.XInputGetBatteryInformation == nil {
 		panic("Procedure not suppported in current XInput version")
 	}
 
@@ -159,7 +161,7 @@ func GetBatteryInformation(userIndex int, deviceSubtype int) (*XINPUT_BATTERY_IN
 }
 
 func GetState(userIndex int) (bool, *XINPUT_STATE) {
-	if api.XInputGetState != nil {
+	if api.XInputGetState == nil {
 		panic("Procedure not suppported in current XInput version")
 	}
 
